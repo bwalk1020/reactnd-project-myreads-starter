@@ -1,6 +1,12 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Switch,
+} from 'react-router-dom';
 
 class BooksApp extends React.Component {
   state = {
@@ -10,7 +16,31 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
+    books: [],
+    bookStates: [
+      {move: "Move to..."},
+      {currentlyReading: "Currently Reading"},
+      {wantToRead: "Want to Read"},
+      {read: "Read"},
+      {none: "None"}
+    ],
     showSearchPage: false
+  }
+
+  setBooks = (books) => {
+    this.setState(currentState => {
+      return {
+        books: books
+      }
+    });  
+  };
+
+  componentDidMount = () => {
+    BooksAPI.getAll().then( 
+      books => {
+        this.setBooks(books);
+      }
+    );
   }
 
   render() {
